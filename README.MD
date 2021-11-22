@@ -1,6 +1,4 @@
-
-
-##Requirements
+## Requirements
 - Java 11 (**important!**)
 - Maven
 
