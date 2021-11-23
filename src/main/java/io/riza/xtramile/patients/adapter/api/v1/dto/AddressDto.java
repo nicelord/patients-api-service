@@ -11,7 +11,7 @@ public class AddressDto {
     private final String street;
     private final String suburb;
     private final String state;
-    private final String postcode;
+    private final String postCode;
 
     public static AddressDto toDomain(Address address) {
         return new AddressDto(address.getStreet(),
