@@ -55,13 +55,18 @@ public class PatientsApiService {
     }
 
     public PageResponse<PatientDto> search(String name, int page, int size) {
-        PageResult<Patient> patientPageResult = patientPagerQuery.searchByName(name, page-1, size);
+        PageResult<Patient> patientPageResult = patientPagerQuery.searchByName(name, page - 1, size);
         return buildPage(patientPageResult);
     }
 
     public PageResponse<PatientDto> search(Long pid, int page, int size) {
-        PageResult<Patient> patientPageResult = patientPagerQuery.searchByPid(pid, page-1, size);
+        PageResult<Patient> patientPageResult = patientPagerQuery.searchByPid(pid, page - 1, size);
         return buildPage(patientPageResult);
+    }
+
+    public PageResult<PatientDto> all(int page, int size) {
+        PageResult<Patient> all = patientPagerQuery.all(page-1, size);
+        return buildPage(all);
     }
 
 
@@ -73,4 +78,6 @@ public class PatientsApiService {
         pageResponse.setTotalPages(patientPageResult.getTotalPages());
         return pageResponse;
     }
+
+
 }

@@ -1,5 +1,6 @@
 package io.riza.xtramile.patients.adapter.persistence;
 
+import com.fasterxml.jackson.databind.PropertyName;
 import io.riza.xtramile.patients.adapter.persistence.model.PatientEntity;
 import io.riza.xtramile.patients.adaptersutils.PageResult;
 import io.riza.xtramile.patients.adaptersutils.PatientPagerQuery;
@@ -8,6 +9,7 @@ import io.riza.xtramile.patients.domain.Gender;
 import io.riza.xtramile.patients.domain.Patient;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Repository;
 
 import javax.persistence.EntityNotFoundException;
@@ -63,17 +65,22 @@ public class PatientJpaRepository implements PatientPagerQuery {
     @Override
     public PageResult<Patient> searchByName(String name, int page, int size) {
         Page<PatientEntity> entityPage = patientRepository.findAllByName(name, PageRequest.of(page, size));
-        PageResult<Patient> pageResult = new PageResult<>();
-        pageResult.setData(entityPage.get().map(EntityMapper::toPatient).collect(Collectors.toList()));
-        pageResult.setTotalPages(entityPage.getTotalPages());
-        pageResult.setTotalItems(entityPage.getTotalElements());
-        pageResult.setCurrentPage(entityPage.getNumber()+1);
-        return pageResult;
+        return buildPageResult(entityPage);
     }
 
     @Override
     public PageResult<Patient> searchByPid(Long pid, int page, int size) {
-        Page<PatientEntity> entityPage = patientRepository.findAllByPidEquals(pid, PageRequest.of(page, size));
+        Page<PatientEntity> entityPage = patientRepository.findAllByPidEquals(pid, PageRequest.of(page, size).withSort(Sort.by(Sort.Direction.DESC,"pid")));
+        return buildPageResult(entityPage);
+    }
+
+    @Override
+    public PageResult<Patient> all(int page, int size) {
+        Page<PatientEntity> all = patientRepository.findAll(PageRequest.of(page, size).withSort(Sort.by(Sort.Direction.DESC,"pid")));
+        return buildPageResult(all);
+    }
+
+    private PageResult<Patient> buildPageResult(Page<PatientEntity> entityPage) {
         PageResult<Patient> pageResult = new PageResult<>();
         pageResult.setData(entityPage.get().map(EntityMapper::toPatient).collect(Collectors.toList()));
         pageResult.setTotalPages(entityPage.getTotalPages());

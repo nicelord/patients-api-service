@@ -1,18 +1,16 @@
 package io.riza.xtramile.patients.adapter.api.v1.dto;
 
-import io.riza.xtramile.patients.domain.Address;
 import io.riza.xtramile.patients.domain.Gender;
 import io.riza.xtramile.patients.domain.Patient;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 
 @Getter
 @RequiredArgsConstructor
 public class PatientDto {
-    private final Long id;
+    private final Long pid;
     private final String firstName;
     private final String lastName;
     private final LocalDate dob;

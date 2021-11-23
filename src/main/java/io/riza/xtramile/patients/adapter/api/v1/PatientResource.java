@@ -15,6 +15,7 @@ import javax.validation.constraints.Min;
 
 @Validated
 @RestController
+@CrossOrigin(origins = "*")
 @RequestMapping(value = "/v1/patients")
 public class PatientResource {
 
@@ -45,6 +46,12 @@ public class PatientResource {
     public PatientDto update(@PathVariable Long pid, @Valid @RequestBody ChangeInfoRequest request) {
         Patient patient = patientsApiService.changeInfo(pid, request);
         return PatientDto.of(patient);
+    }
+
+    @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
+    public PageResult<PatientDto> list(@RequestParam(defaultValue = "1") @Min(value = 1, message = "must not be less than 1") int page,
+                                       @RequestParam(defaultValue = "10") @Min(value = 10, message = "must not be less than 10") int size) {
+        return patientsApiService.all(page, size);
     }
 
     @GetMapping(value = "/searchByName", produces = MediaType.APPLICATION_JSON_VALUE)
